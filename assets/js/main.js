@@ -37,15 +37,25 @@
   /* ---------- reveal on scroll ---------- */
   const revealEls = $$(".reveal, .reveal-x, .clip-rise");
   if (revealEls.length) {
+    const reveal = (el) => el.classList.add("in");
     if (prefersReduced || !("IntersectionObserver" in window)) {
-      revealEls.forEach((el) => el.classList.add("in"));
+      revealEls.forEach(reveal);
     } else {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); }
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      }, { threshold: 0, rootMargin: "0px 0px -6% 0px" });
       revealEls.forEach((el) => io.observe(el));
+      // failsafe: reveal anything already on screen at load (covers async IO timing)
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        revealEls.forEach((el) => {
+          if (el.classList.contains("in")) return;
+          const r = el.getBoundingClientRect();
+          if (r.top < vh * 0.92 && r.bottom > 0) { reveal(el); io.unobserve(el); }
+        });
+      }));
     }
   }
 

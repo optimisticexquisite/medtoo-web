@@ -434,7 +434,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.02;
 .mobile-menu {
   position: fixed; inset: 0; z-index: 999;
   background: var(--ink-1);
-  padding: clamp(5rem, 18vw, 7rem) var(--gutter) 3rem;
+  padding: clamp(7.5rem, 22vw, 9rem) var(--gutter) 3rem;
   display: flex; flex-direction: column;
   transform: translateY(-100%);
   transition: transform 0.5s var(--ease-wipe);
@@ -567,7 +567,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.02;
 
 .pillars { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 2.5rem; }
 @media (min-width: 640px) { .pillars { grid-template-columns: repeat(3, 1fr); } }
-.pillar { background: var(--ink-2); padding: 1.7rem 1.5rem; transition: background 0.4s var(--ease); }
+.pillar { background: var(--ink-2); padding: 1.7rem 1.5rem; transition: background 0.4s var(--ease); min-width: 0; overflow-wrap: break-word; }
 .pillar:hover { background: var(--ink-3); }
 .pillar__ic { width: 34px; height: 34px; color: var(--blood); margin-bottom: 1rem; }
 .pillar:nth-child(3) .pillar__ic { color: var(--teal-bright); }
@@ -995,10 +995,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.02;
 .js .reveal-x { opacity: 0; transform: translateX(-30px); }
 .reveal-x.in { opacity: 1; transform: none; }
 
-/* clip reveal for images */
-.clip-rise { transition: clip-path 1.1s var(--ease-wipe); }
-.js .clip-rise { clip-path: inset(100% 0 0 0); }
-.clip-rise.in { clip-path: inset(0 0 0 0); }
+/* rise-in reveal for framed images (opacity/transform — reliable cross-browser) */
+.clip-rise { transition: opacity 1s var(--ease), transform 1.1s var(--ease-wipe); }
+.js .clip-rise { opacity: 0; transform: translateY(38px) scale(0.985); }
+.clip-rise.in { opacity: 1; transform: none; }
 
 /* ----------------------------------------------------------
    24. UTILITIES
@@ -1033,7 +1033,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.02;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .reveal, .reveal-x { opacity: 1 !important; transform: none !important; }
+  .reveal, .reveal-x, .clip-rise { opacity: 1 !important; transform: none !important; }
   .clip-rise { clip-path: none !important; }
   .redact::after { transform: scaleX(0) !important; }
   .marquee__track { animation: none !important; }
